@@ -1,14 +1,10 @@
 'use client';
-
 import SignInButton from './auth/SignInButton';
 
 const Header: React.FC = () => {
 	return (
-		<header>
-			<div>Books Dashboard</div>
-			<div>
-				<SignInButton />
-			</div>
+		<header className='flex justify-between bg-slate-700 text-white p-4'>
+			<SignInButton />
 		</header>
 	);
 };

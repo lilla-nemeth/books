@@ -1,5 +1,3 @@
-'use client';
-
 import { useSession, signIn, signOut } from 'next-auth/react';
 import Button from '@/components/generic/Button';
 
@@ -7,23 +5,23 @@ const SignInButton: React.FC = () => {
 	const { data: session, status } = useSession();
 
 	if (status === 'loading') {
-		return <Button onClick={() => {}} label={'Loading...'} disabled />;
+		return <Button onClick={() => {}} label={'Loading...'} disabled className='flex justify-end' />;
 	}
 
 	if (session) {
 		return (
 			<>
-				Signed in as {session.user?.email} <br />
-				<Button onClick={() => signOut()} label={'Sign out'} />
+				Hi, {session.user?.name}! <br />
+				<Button onClick={() => signOut()} label={'Sign Out'} />
+			</>
+		);
+	} else {
+		return (
+			<>
+				<Button onClick={() => signIn('github', { callbackUrl: '/books' })} label={'Sign In'} className='flex justify-end' />
 			</>
 		);
 	}
-	return (
-		<>
-			Not signed in <br />
-			<Button onClick={() => signIn('github')} label={'Sign in with GitHub'} />
-		</>
-	);
 };
 
 export default SignInButton;
