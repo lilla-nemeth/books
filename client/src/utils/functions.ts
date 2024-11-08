@@ -5,11 +5,18 @@ const fetchBooks = async (
 	setBooks: Dispatch<SetStateAction<Books['docs']>>,
 	books: Books['docs'],
 	setFilteredBooksData: Dispatch<SetStateAction<Books['docs']>>,
-	keyword: string,
-	setError: Dispatch<SetStateAction<string | null>>
+	searchTerm: string,
+	offset: number,
+	limit: number,
+	setError: Dispatch<SetStateAction<string | null>>,
+	setTotalCount: Dispatch<SetStateAction<number>>,
+	setLoading: Dispatch<SetStateAction<boolean>>
 ) => {
+	setError(null);
+	setLoading(true);
 	try {
-		const res = await fetch(`/api/books?searchTerm=${encodeURIComponent(keyword)}`);
+		const res = await fetch(`/api/books?searchTerm=${encodeURIComponent(searchTerm)}&limit=${limit}&offset=${offset}`);
+		// const res = await fetch(`/api/books?searchTerm=${encodeURIComponent(searchTerm)}`);
 
 		if (!res.ok) {
 			const errorData = await res.json();
@@ -19,8 +26,11 @@ const fetchBooks = async (
 
 		setBooks(data.docs);
 		setFilteredBooksData(books);
+		setTotalCount(data.numFound || 0);
 	} catch (err) {
 		setError((err as Error).message);
+	} finally {
+		setLoading(false);
 	}
 };
 
