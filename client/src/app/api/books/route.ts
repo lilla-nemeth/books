@@ -2,12 +2,14 @@ export async function GET(request: { url: string | URL }) {
 	try {
 		const url = new URL(request.url);
 		const searchTerm = url.searchParams.get('searchTerm') || '';
+		const limit = parseInt(url.searchParams.get('limit') || '10');
+		const offset = parseInt(url.searchParams.get('offset') || '0');
 
 		if (!searchTerm) {
 			return new Response(JSON.stringify({ error: 'Search term is required' }), { status: 400 });
 		}
 
-		const API_URL = `https://openlibrary.org/search.json?title=${encodeURIComponent(searchTerm)}`;
+		const API_URL = `https://openlibrary.org/search.json?title=${encodeURIComponent(searchTerm)}&limit=${limit}&offset=${offset}`;
 
 		const response = await fetch(API_URL);
 
