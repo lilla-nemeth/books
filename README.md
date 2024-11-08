@@ -1,7 +1,8 @@
 # Books (Dashboard)
 
 Books (Dashboard) uses Open Library Search API to search books.
-Built with React, Next.js, NextAuth and TypeScript.
+
+🛠 Built with React, Next.js, NextAuth, TypeScript and Tailwind CSS.
 
 For the sake of simplicity, the app only uses GitHub from built-in OAuth Providers.
 

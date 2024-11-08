@@ -1,11 +1,6 @@
 'use client';
 
-interface ButtonProps {
-	onClick: () => void;
-	label: string;
-	disabled?: boolean;
-	className?: string;
-}
+import { ButtonProps } from '@/types/componentProps';
 
 const Button: React.FC<ButtonProps> = (props) => {
 	const { onClick, label, disabled, className } = props;
