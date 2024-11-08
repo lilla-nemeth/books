@@ -1,6 +1,6 @@
 'use client';
 
-const Home = () => {
+const HomePage = () => {
 	return (
 		<div>
 			<main>
@@ -10,4 +10,4 @@ const Home = () => {
 	);
 };
 
-export default Home;
+export default HomePage;
