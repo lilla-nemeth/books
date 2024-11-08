@@ -1,7 +1,7 @@
 import Button from './Button';
 import { PaginationProps } from '@/types/componentProps';
 
-const Pagination: React.FC<PaginationProps> = (props) => {
+export const Pagination: React.FC<PaginationProps> = (props) => {
 	const { currentPage, totalCount, itemsPerPage, onPageChange, containerClassName } = props;
 
 	const totalPages = Math.ceil(totalCount / itemsPerPage);
@@ -39,5 +39,3 @@ const Pagination: React.FC<PaginationProps> = (props) => {
 		</div>
 	);
 };
-
-export default Pagination;

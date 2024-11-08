@@ -1,6 +1,7 @@
 'use client';
 
-import Pagination from '@/components/generic/Pagination';
+import Input from '@/components/generic/Input';
+import { Pagination } from '@/components/generic/Pagination';
 import { Books, Book } from '@/types/data';
 import { fetchBooks } from '@/utils/functions';
 import { useSession } from 'next-auth/react';
@@ -51,12 +52,26 @@ const BooksPage = () => {
 		);
 	};
 
+	const handleSearchInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+		setKeyword(e.target.value);
+		setPage(1);
+	};
+
 	const handlePageChange = (newPage: number) => {
 		setPage(newPage);
 	};
 
 	return (
 		<div className='flex flex-col m-4'>
+			<Input
+				type={'text'}
+				placeholder={'Find books...'}
+				value={keyword}
+				onChange={handleSearchInput}
+				inputClassName={
+					'bg-gray-50 border border-gray-300 text-gray-900 rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
+				}
+			/>
 			<div>
 				{loading && <div>Loading books...</div>}
 				{error && <div className='error'>{error}</div>}

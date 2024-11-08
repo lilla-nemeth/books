@@ -5,6 +5,33 @@ interface ButtonProps {
 	className?: string;
 }
 
+type InputType =
+	| 'text'
+	| 'search'
+	| 'number'
+	| 'password'
+	| 'email'
+	| 'tel'
+	| 'url'
+	| 'date'
+	| 'time'
+	| 'file'
+	| 'checkbox'
+	| 'radio'
+	| 'range'
+	| 'submit';
+
+interface InputProps {
+	onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+	className?: string;
+	type: InputType;
+	placeholder: string;
+	value: string;
+	inputClassName?: string;
+	labelClassName?: string;
+	label?: string;
+}
+
 interface PaginationProps {
 	currentPage: number;
 	totalCount: number;
@@ -13,4 +40,4 @@ interface PaginationProps {
 	containerClassName?: string;
 }
 
-export type { ButtonProps, PaginationProps };
+export type { ButtonProps, InputProps, PaginationProps };
