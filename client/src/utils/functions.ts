@@ -16,7 +16,6 @@ const fetchBooks = async (
 	setLoading(true);
 	try {
 		const res = await fetch(`/api/books?searchTerm=${encodeURIComponent(searchTerm)}&limit=${limit}&offset=${offset}`);
-		// const res = await fetch(`/api/books?searchTerm=${encodeURIComponent(searchTerm)}`);
 
 		if (!res.ok) {
 			const errorData = await res.json();
@@ -29,9 +28,8 @@ const fetchBooks = async (
 		setTotalCount(data.numFound || 0);
 	} catch (err) {
 		setError((err as Error).message);
-	} finally {
-		setLoading(false);
 	}
+	setLoading(false);
 };
 
 export { fetchBooks };

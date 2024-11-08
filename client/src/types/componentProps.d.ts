@@ -5,4 +5,12 @@ interface ButtonProps {
 	className?: string;
 }
 
-export type { ButtonProps };
+interface PaginationProps {
+	currentPage: number;
+	totalCount: number;
+	itemsPerPage: number;
+	onPageChange: (newPage: number) => void;
+	containerClassName?: string;
+}
+
+export type { ButtonProps, PaginationProps };
