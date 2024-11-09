@@ -52,8 +52,11 @@ const BooksPage = () => {
 		return (
 			<>
 				{bookItems.map((item: Book) => (
-					<div key={item.key} className='bg-white rounded-lg overflow-hidden shadow-2xl xl:w-1/5 lg:w-1/4 md:w-1/3 sm:w-1/2'>
-						<div className='min-h-80'>
+					<div
+						key={item.key}
+						className='flex flex-col min-h-96 bg-white rounded-lg overflow-hidden shadow-2xl xl:w-1/1 lg:w-1/1 md:w-1/1 sm:w-1/1'
+					>
+						<div className='h-50'>
 							{item.cover_i ? (
 								<Image
 									src={`https://covers.openlibrary.org/b/id/${item.cover_i}-M.jpg`}
@@ -61,10 +64,10 @@ const BooksPage = () => {
 									width={200}
 									height={200}
 									onError={handleImageError}
-									className='"h-48 w-full object-cover object-end'
+									className='h-48 w-full object-cover object-end'
 								/>
 							) : (
-								<div className='p-1 h-52 text-xl text-center bg-slate-300 text-slate-600 flex flex-row items-center justify-center font-semibold'>
+								<div className='p-1 h-52 text-xl text-center bg-slate-300 text-slate-600 flex items-center justify-center font-semibold'>
 									Cover Image Unavailable
 								</div>
 							)}
@@ -104,7 +107,7 @@ const BooksPage = () => {
 					'bg-gray-50 p-4 border border-gray-300 text-gray-900 rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
 				}
 			/>
-			<div className='flex flex-wrap min-h-screen pt-8 pb-8 flex items-center justify-center'>
+			<div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 pt-8 pb-8'>
 				{loading && <div>Loading books...</div>}
 				{error && <div className='error'>{error}</div>}
 				{books && returnCards(books)}
