@@ -18,7 +18,7 @@ const SignInButton: React.FC = () => {
 	} else {
 		return (
 			<>
-				<Button onClick={() => signIn('github', { callbackUrl: '/books' })} label={'Sign In'} className='flex justify-end' />
+				<Button onClick={() => signIn('github', { callbackUrl: '/books' })} label={'Sign In'} className='flex ml-auto' />
 			</>
 		);
 	}
