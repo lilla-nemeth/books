@@ -13,7 +13,7 @@ interface Book {
 	title: string;
 	author_name: string[];
 	first_publish_year: number;
-	cover_id: number;
+	cover_i: number;
 	subject?: string[];
 	isbn?: string[];
 	publish_date?: string[];
