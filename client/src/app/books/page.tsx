@@ -38,10 +38,6 @@ const BooksPage = () => {
 		}
 	}, [keyword, page]);
 
-	if (status === 'loading') {
-		return <div>Loading...</div>;
-	}
-
 	const handleImageError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
 		const target = e.target as HTMLImageElement;
 		target.onerror = null;
