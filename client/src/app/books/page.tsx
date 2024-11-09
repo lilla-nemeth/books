@@ -56,7 +56,7 @@ const BooksPage = () => {
 						key={item.key}
 						className='flex flex-col min-h-96 bg-white rounded-lg overflow-hidden shadow-2xl xl:w-1/1 lg:w-1/1 md:w-1/1 sm:w-1/1'
 					>
-						<div className='h-50'>
+						<div className='flex flex-5'>
 							{item.cover_i ? (
 								<Image
 									src={`https://covers.openlibrary.org/b/id/${item.cover_i}-M.jpg`}
@@ -64,15 +64,15 @@ const BooksPage = () => {
 									width={200}
 									height={200}
 									onError={handleImageError}
-									className='h-48 w-full object-cover object-end'
+									className='flex flex-5 flex-col w-full object-cover h-96'
 								/>
 							) : (
-								<div className='p-1 h-52 text-xl text-center bg-slate-300 text-slate-600 flex items-center justify-center font-semibold'>
+								<div className='flex w-full h-96 bg-slate-300 text-xl text-slate-600 text-center items-center justify-center font-semibold'>
 									Cover Image Unavailable
 								</div>
 							)}
 						</div>
-						<div className='p-6'>
+						<div className='flex-1 p-6'>
 							<div className='flex items-baseline'>
 								<div className='text-gray-600 text-xs uppercase font-semibold tracking-wide'>
 									Publishing Year: {item.first_publish_year}
