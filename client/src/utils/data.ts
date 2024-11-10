@@ -1,7 +1,7 @@
 import { Books } from '@/types/data';
 import { Dispatch, SetStateAction } from 'react';
 
-const calculateDuration = (
+const calculateCallDuration = (
 	startNum: number,
 	endNum: number,
 	requestCount: number,
@@ -47,7 +47,7 @@ const fetchBooks = async (
 
 		const endTime = Date.now();
 
-		calculateDuration(startTime, endTime, requestCount, setTotalDuration, setRequestCount, setAverageDuration);
+		calculateCallDuration(startTime, endTime, requestCount, setTotalDuration, setRequestCount, setAverageDuration);
 
 		setBooks(data.docs);
 		setTotalCount(data.numFound || 0);
