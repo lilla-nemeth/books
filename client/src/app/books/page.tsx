@@ -2,6 +2,7 @@
 
 import Input from '@/components/generic/Input';
 import { Pagination } from '@/components/generic/Pagination';
+import { useAverageDuration } from '@/context/SearchDurationContext';
 import { Books, Book } from '@/types/data';
 import { fetchBooks } from '@/utils/functions';
 import { useSession } from 'next-auth/react';
@@ -19,6 +20,7 @@ const BooksPage = () => {
 	const [, setLoading] = useState<boolean>(false);
 	const [error, setError] = useState<string | null>(null);
 	const router = useRouter();
+	const { setAverageDuration, setTotalDuration, setRequestCount, requestCount } = useAverageDuration();
 
 	// Fallback image (B option when cover image is unavailable)
 	const fallbackImage = '/images/book-cover-fallback-s.webp';
@@ -34,7 +36,21 @@ const BooksPage = () => {
 		const offset = (page - 1) * limit;
 
 		if (keyword) {
-			fetchBooks(setBooks, books, setFilteredBooksApiData, keyword, offset, limit, setError, setTotalCount, setLoading);
+			fetchBooks(
+				setBooks,
+				books,
+				setFilteredBooksApiData,
+				keyword,
+				offset,
+				limit,
+				setError,
+				setTotalCount,
+				setLoading,
+				setTotalDuration,
+				requestCount,
+				setRequestCount,
+				setAverageDuration
+			);
 		}
 	}, [keyword, page]);
 

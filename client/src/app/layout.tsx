@@ -3,6 +3,7 @@
 import { SessionProvider } from 'next-auth/react';
 import Header from '@/components/Header';
 import '@/styles/global.css';
+import { SearchDurationContextProvider } from '@/context/SearchDurationContext';
 
 export default function RootLayout({
 	children,
@@ -13,8 +14,10 @@ export default function RootLayout({
 		<html lang='en'>
 			<body>
 				<SessionProvider>
-					<Header />
-					<main>{children}</main>
+					<SearchDurationContextProvider>
+						<Header />
+						<main>{children}</main>
+					</SearchDurationContextProvider>
 				</SessionProvider>
 			</body>
 		</html>
