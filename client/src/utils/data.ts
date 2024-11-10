@@ -14,11 +14,11 @@ const fetchBooks = async (
 	setTotalDuration: Dispatch<SetStateAction<number>>,
 	requestCount: number,
 	setRequestCount: Dispatch<SetStateAction<number>>,
-	setAverageDuration: Dispatch<SetStateAction<number>>,
+	setAverageDuration: Dispatch<SetStateAction<number>>
 ) => {
 	setError(null);
 	setLoading(true);
-	
+
 	const startTime = Date.now();
 
 	try {
@@ -33,9 +33,9 @@ const fetchBooks = async (
 		const endTime = Date.now();
 		const duration = endTime - startTime;
 
-		setTotalDuration(prevTotal => prevTotal + duration);
-		setRequestCount(prevCount => prevCount + 1);
-		setAverageDuration(prevAvg => (prevAvg * (requestCount) + duration) / (requestCount + 1));
+		setTotalDuration((prevTotal) => prevTotal + duration);
+		setRequestCount((prevCount) => prevCount + 1);
+		setAverageDuration((prevAvg) => (prevAvg * requestCount + duration) / (requestCount + 1));
 
 		setBooks(data.docs);
 		setFilteredBooksData(books);

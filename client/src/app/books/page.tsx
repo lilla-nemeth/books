@@ -6,7 +6,7 @@ import { Pagination } from '@/components/generic/Pagination';
 import { useAverageDuration } from '@/context/SearchDurationContext';
 import { Books } from '@/types/data';
 import { handleImageError, handlePageChange, handleSearchInput } from '@/utils/eventHandlers';
-import { fetchBooks } from '@/utils/functions';
+import { fetchBooks } from '@/utils/data';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -16,6 +16,7 @@ const BooksPage: React.FC = () => {
 	const [books, setBooks] = useState<Books['docs']>([]);
 	const [, setFilteredBooksApiData] = useState<Books['docs']>([]);
 	const [keyword, setKeyword] = useState('Animal Farm');
+	const [storedKeyword, setStoredKeyword] = useState(keyword);
 	const [page, setPage] = useState<number>(1);
 	const [totalCount, setTotalCount] = useState<number>(0);
 	const [, setLoading] = useState<boolean>(false);
@@ -30,27 +31,37 @@ const BooksPage: React.FC = () => {
 	}, [status, router]);
 
 	useEffect(() => {
-		const limit = 10;
-		const offset = (page - 1) * limit;
+		const timer = setTimeout(() => {
+			setStoredKeyword(keyword);
+		}, 500);
 
-		if (keyword) {
-			fetchBooks(
-				setBooks,
-				books,
-				setFilteredBooksApiData,
-				keyword,
-				offset,
-				limit,
-				setError,
-				setTotalCount,
-				setLoading,
-				setTotalDuration,
-				requestCount,
-				setRequestCount,
-				setAverageDuration
-			);
+		return () => clearTimeout(timer);
+	}, [keyword]);
+
+	useEffect(() => {
+		if (storedKeyword) {
+			const limit = 10;
+			const offset = (page - 1) * limit;
+
+			if (keyword) {
+				fetchBooks(
+					setBooks,
+					books,
+					setFilteredBooksApiData,
+					keyword,
+					offset,
+					limit,
+					setError,
+					setTotalCount,
+					setLoading,
+					setTotalDuration,
+					requestCount,
+					setRequestCount,
+					setAverageDuration
+				);
+			}
 		}
-	}, [keyword, page]);
+	}, [storedKeyword, page]);
 
 	return (
 		<div className='flex flex-col m-4 antialiased p-8'>
