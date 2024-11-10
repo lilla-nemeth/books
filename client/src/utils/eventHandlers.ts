@@ -1,3 +1,18 @@
+import { signIn, signOut } from 'next-auth/react';
+import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
+
+const handleSignIn = async (provider: string, path: string) => {
+	await signIn(provider, { callbackUrl: path });
+};
+
+const handleSignOut = async (status: string, router: AppRouterInstance) => {
+	await signOut({ redirect: false });
+
+	if (status === 'unauthenticated') {
+		router.push('/');
+	}
+};
+
 const handleImageError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
 	// Fallback image (B option when cover image is unavailable)
 	const fallbackImage = '/images/book-cover-fallback-s.webp';
@@ -33,4 +48,4 @@ const handleInputClick = (setKeyword: React.Dispatch<React.SetStateAction<string
 	setKeyword('');
 };
 
-export { handleImageError, handleSearchInput, handleKeyDown, handlePageChange, handleInputClick };
+export { handleSignIn, handleSignOut, handleImageError, handleSearchInput, handleKeyDown, handlePageChange, handleInputClick };
