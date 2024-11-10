@@ -23,6 +23,8 @@ type InputType =
 
 interface InputProps {
 	onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+	onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
+	onClick?: (e: React.MouseEvent<HTMLInputElement>) => void;
 	className?: string;
 	type: InputType;
 	placeholder: string;
