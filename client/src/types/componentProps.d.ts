@@ -1,3 +1,10 @@
+import { Books } from './data';
+
+interface CardProps {
+	bookItems: Books['docs'];
+	handleImageError: (e: React.SyntheticEvent<HTMLImageElement, Event>) => void;
+}
+
 interface ButtonProps {
 	onClick: () => void;
 	label: string;
@@ -42,4 +49,4 @@ interface PaginationProps {
 	containerClassName?: string;
 }
 
-export type { ButtonProps, InputProps, PaginationProps };
+export type { CardProps, ButtonProps, InputProps, PaginationProps };
