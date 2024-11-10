@@ -1,29 +1,27 @@
 'use client';
 
+import Card from '@/components/books/Card';
 import Input from '@/components/generic/Input';
 import { Pagination } from '@/components/generic/Pagination';
 import { useAverageDuration } from '@/context/SearchDurationContext';
-import { Books, Book } from '@/types/data';
-import { fetchBooks } from '@/utils/functions';
+import { Books } from '@/types/data';
+import { handleImageError, handlePageChange, handleSearchInput } from '@/utils/eventHandlers';
+import { fetchBooks } from '@/utils/data';
 import { useSession } from 'next-auth/react';
-import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
-const BooksPage = () => {
+const BooksPage: React.FC = () => {
 	const { status } = useSession();
 	const [books, setBooks] = useState<Books['docs']>([]);
-	const [, setFilteredBooksApiData] = useState<Books['docs']>([]);
-	const [keyword, setKeyword] = useState('Animal Farm');
+	const [keyword, setKeyword] = useState('Harry Potter');
+	const [storedKeyword, setStoredKeyword] = useState(keyword);
 	const [page, setPage] = useState<number>(1);
 	const [totalCount, setTotalCount] = useState<number>(0);
-	const [, setLoading] = useState<boolean>(false);
+	const [loading, setLoading] = useState<boolean>(false);
 	const [error, setError] = useState<string | null>(null);
 	const router = useRouter();
 	const { setAverageDuration, setTotalDuration, setRequestCount, requestCount } = useAverageDuration();
-
-	// Fallback image (B option when cover image is unavailable)
-	const fallbackImage = '/images/book-cover-fallback-s.webp';
 
 	useEffect(() => {
 		if (status === 'unauthenticated') {
@@ -32,125 +30,57 @@ const BooksPage = () => {
 	}, [status, router]);
 
 	useEffect(() => {
-		const limit = 10;
-		const offset = (page - 1) * limit;
+		const timer = setTimeout(() => {
+			setStoredKeyword(keyword);
+		}, 500);
 
-		if (keyword) {
-			fetchBooks(
-				setBooks,
-				books,
-				setFilteredBooksApiData,
-				keyword,
-				offset,
-				limit,
-				setError,
-				setTotalCount,
-				setLoading,
-				setTotalDuration,
-				requestCount,
-				setRequestCount,
-				setAverageDuration
-			);
+		return () => clearTimeout(timer);
+	}, [keyword]);
+
+	useEffect(() => {
+		if (storedKeyword) {
+			const limit = 10;
+			const offset = (page - 1) * limit;
+
+			if (keyword) {
+				fetchBooks(
+					setBooks,
+					keyword,
+					offset,
+					limit,
+					setError,
+					setTotalCount,
+					setLoading,
+					setTotalDuration,
+					requestCount,
+					setRequestCount,
+					setAverageDuration
+				);
+			}
 		}
-	}, [keyword, page]);
-
-	const handleImageError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
-		const target = e.target as HTMLImageElement;
-		target.onerror = null;
-		target.src = fallbackImage;
-	};
-
-	const returnCards = (bookItems: Books['docs']): React.ReactNode => {
-		return (
-			<>
-				{bookItems.map((item: Book) => (
-					<div
-						key={item.key}
-						className='flex flex-col min-h-96 bg-white rounded-lg overflow-hidden shadow-2xl xl:w-1/1 lg:w-1/1 md:w-1/1 sm:w-1/1'
-					>
-						<div className='flex flex-5'>
-							{item.cover_i ? (
-								<Image
-									src={`https://covers.openlibrary.org/b/id/${item.cover_i}-M.jpg`}
-									alt={item.title}
-									width={200}
-									height={200}
-									onError={handleImageError}
-									loading='lazy'
-									className='flex flex-5 flex-col w-full object-cover h-96'
-								/>
-							) : (
-								<div className='flex w-full h-96 bg-slate-300 text-xl text-slate-600 text-center items-center justify-center font-semibold'>
-									Cover Image Unavailable
-								</div>
-							)}
-						</div>
-						<div className='flex flex-1 p-6 flex-col'>
-							<div className='flex flex-col items-baseline flex-wrap break-words'>
-								<div className='text-gray-600 text-xs uppercase font-semibold tracking-wide'>
-									<div>Publishing Year: {item.first_publish_year}</div>
-								</div>
-							</div>
-							<h4 className='mt-6 font-semibold text-xl leading-tight flex-wrap break-words'>{item.title}</h4>
-							<div className='mt-2 mb-6 text-sm'>
-								{Array.isArray(item.author_name)
-									? item.author_name.map((author) => {
-											return <div key={`${item.key}-${Math.random()}`}>{author}</div>;
-									  })
-									: item.author_name}
-							</div>
-							<div className='mt-auto text-gray-600 text-xs uppercase font-semibold tracking-wide'>
-								<div>Edition: {item.edition_count}</div>
-							</div>
-						</div>
-					</div>
-				))}
-			</>
-		);
-	};
-
-	const handleSearchInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-		setKeyword(e.target.value);
-		setPage(1);
-	};
-
-	// const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-	// 	if (e.key === 'Enter') {
-	// 		setKeyword('');
-	// 	}
-	// };
-
-	// const handleInputClick = () => {
-	// 	setKeyword('');
-	// };
-
-	const handlePageChange = (newPage: number) => {
-		setPage(newPage);
-	};
+	}, [storedKeyword, page]);
 
 	return (
 		<div className='flex flex-col m-4 antialiased p-8'>
+			<div className='flex justify-center p-4 text-500 text-xl font-semibold'>{loading ? 'Books are loading...' : 'Books'}</div>
+			{error && <div className='flex justify-center text-500 text-xl font-semibold'>{error}</div>}
 			<Input
 				type={'text'}
 				placeholder={'Find books...'}
 				value={keyword}
-				onChange={handleSearchInput}
-				// onKeyDown={handleKeyDown}
-				// onClick={handleInputClick}
+				onChange={(e) => handleSearchInput(e, setKeyword, setPage)}
 				inputClassName={
 					'bg-gray-50 p-4 border border-gray-300 text-gray-900 rounded-md block w-full p-2.5 dark:bg-gray-200 dark:placeholder-gray-400 dark:text-black'
 				}
 			/>
 			<div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 pt-8 pb-8'>
-				{/* {loading && <div className='text-xl text-slate-600 text-center font-semibold'>Loading books...</div>} */}
-				{error && <div className='error'>{error}</div>}
-				{books && returnCards(books)}
+				{books && <Card bookItems={books} handleImageError={(e) => handleImageError(e)} />}
 			</div>
 			<Pagination
 				currentPage={page}
 				totalCount={totalCount}
 				itemsPerPage={10}
-				onPageChange={handlePageChange}
+				onPageChange={(newPage) => handlePageChange(newPage, setPage)}
 				containerClassName={'flex justify-between mt-4 mb-4'}
 			/>
 		</div>

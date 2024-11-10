@@ -1,10 +1,25 @@
 import { Books } from '@/types/data';
 import { Dispatch, SetStateAction } from 'react';
 
+const calculateCallDuration = (
+	startNum: number,
+	endNum: number,
+	requestCount: number,
+	setTotal: Dispatch<SetStateAction<number>>,
+	setReqCount: Dispatch<SetStateAction<number>>,
+	setAvgDuration: Dispatch<SetStateAction<number>>
+): number => {
+	const duration = endNum - startNum;
+
+	setTotal((prevTotal) => prevTotal + duration);
+	setReqCount((prevCount) => prevCount + 1);
+	setAvgDuration((prevAvg) => (prevAvg * requestCount + duration) / (requestCount + 1));
+
+	return duration;
+};
+
 const fetchBooks = async (
 	setBooks: Dispatch<SetStateAction<Books['docs']>>,
-	books: Books['docs'],
-	setFilteredBooksData: Dispatch<SetStateAction<Books['docs']>>,
 	searchTerm: string,
 	offset: number,
 	limit: number,
@@ -14,11 +29,11 @@ const fetchBooks = async (
 	setTotalDuration: Dispatch<SetStateAction<number>>,
 	requestCount: number,
 	setRequestCount: Dispatch<SetStateAction<number>>,
-	setAverageDuration: Dispatch<SetStateAction<number>>,
+	setAverageDuration: Dispatch<SetStateAction<number>>
 ) => {
 	setError(null);
 	setLoading(true);
-	
+
 	const startTime = Date.now();
 
 	try {
@@ -31,18 +46,15 @@ const fetchBooks = async (
 		const data: Books = await res.json();
 
 		const endTime = Date.now();
-		const duration = endTime - startTime;
 
-		setTotalDuration(prevTotal => prevTotal + duration);
-		setRequestCount(prevCount => prevCount + 1);
-		setAverageDuration(prevAvg => (prevAvg * (requestCount) + duration) / (requestCount + 1));
+		calculateCallDuration(startTime, endTime, requestCount, setTotalDuration, setRequestCount, setAverageDuration);
 
 		setBooks(data.docs);
-		setFilteredBooksData(books);
 		setTotalCount(data.numFound || 0);
 	} catch (err) {
 		setError((err as Error).message);
 	}
+
 	setLoading(false);
 };
 
