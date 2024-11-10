@@ -1,6 +1,23 @@
 import { Books } from '@/types/data';
 import { Dispatch, SetStateAction } from 'react';
 
+const calculateDuration = (
+	startNum: number,
+	endNum: number,
+	requestCount: number,
+	setTotal: Dispatch<SetStateAction<number>>,
+	setReqCount: Dispatch<SetStateAction<number>>,
+	setAvgDuration: Dispatch<SetStateAction<number>>
+): number => {
+	const duration = endNum - startNum;
+
+	setTotal((prevTotal) => prevTotal + duration);
+	setReqCount((prevCount) => prevCount + 1);
+	setAvgDuration((prevAvg) => (prevAvg * requestCount + duration) / (requestCount + 1));
+
+	return duration;
+};
+
 const fetchBooks = async (
 	setBooks: Dispatch<SetStateAction<Books['docs']>>,
 	books: Books['docs'],
@@ -31,11 +48,8 @@ const fetchBooks = async (
 		const data: Books = await res.json();
 
 		const endTime = Date.now();
-		const duration = endTime - startTime;
 
-		setTotalDuration((prevTotal) => prevTotal + duration);
-		setRequestCount((prevCount) => prevCount + 1);
-		setAverageDuration((prevAvg) => (prevAvg * requestCount + duration) / (requestCount + 1));
+		calculateDuration(startTime, endTime, requestCount, setTotalDuration, setRequestCount, setAverageDuration);
 
 		setBooks(data.docs);
 		setFilteredBooksData(books);
