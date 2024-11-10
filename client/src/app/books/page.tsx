@@ -5,6 +5,7 @@ import Input from '@/components/generic/Input';
 import { Pagination } from '@/components/generic/Pagination';
 import { useAverageDuration } from '@/context/SearchDurationContext';
 import { Books } from '@/types/data';
+import { handleImageError, handlePageChange, handleSearchInput } from '@/utils/eventHandlers';
 import { fetchBooks } from '@/utils/functions';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
@@ -21,9 +22,6 @@ const BooksPage: React.FC = () => {
 	const [error, setError] = useState<string | null>(null);
 	const router = useRouter();
 	const { setAverageDuration, setTotalDuration, setRequestCount, requestCount } = useAverageDuration();
-
-	// Fallback image (B option when cover image is unavailable)
-	const fallbackImage = '/images/book-cover-fallback-s.webp';
 
 	useEffect(() => {
 		if (status === 'unauthenticated') {
@@ -54,54 +52,26 @@ const BooksPage: React.FC = () => {
 		}
 	}, [keyword, page]);
 
-	const handleImageError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
-		const target = e.target as HTMLImageElement;
-		target.onerror = null;
-		target.src = fallbackImage;
-	};
-
-	const handleSearchInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-		setKeyword(e.target.value);
-		setPage(1);
-	};
-
-	// const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-	// 	if (e.key === 'Enter') {
-	// 		setKeyword('');
-	// 	}
-	// };
-
-	// const handleInputClick = () => {
-	// 	setKeyword('');
-	// };
-
-	const handlePageChange = (newPage: number) => {
-		setPage(newPage);
-	};
-
 	return (
 		<div className='flex flex-col m-4 antialiased p-8'>
 			<Input
 				type={'text'}
 				placeholder={'Find books...'}
 				value={keyword}
-				onChange={handleSearchInput}
-				// onKeyDown={handleKeyDown}
-				// onClick={handleInputClick}
+				onChange={(e) => handleSearchInput(e, setKeyword, setPage)}
 				inputClassName={
 					'bg-gray-50 p-4 border border-gray-300 text-gray-900 rounded-md block w-full p-2.5 dark:bg-gray-200 dark:placeholder-gray-400 dark:text-black'
 				}
 			/>
 			<div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 pt-8 pb-8'>
-				{/* {loading && <div className='text-xl text-slate-600 text-center font-semibold'>Loading books...</div>} */}
 				{error && <div className='error'>{error}</div>}
-				{books && <Card bookItems={books} handleImageError={handleImageError} />}
+				{books && <Card bookItems={books} handleImageError={(e) => handleImageError(e)} />}
 			</div>
 			<Pagination
 				currentPage={page}
 				totalCount={totalCount}
 				itemsPerPage={10}
-				onPageChange={handlePageChange}
+				onPageChange={(newPage) => handlePageChange(newPage, setPage)}
 				containerClassName={'flex justify-between mt-4 mb-4'}
 			/>
 		</div>
