@@ -16,7 +16,7 @@ const BooksPage = () => {
 	const [keyword, setKeyword] = useState('Animal Farm');
 	const [page, setPage] = useState<number>(1);
 	const [totalCount, setTotalCount] = useState<number>(0);
-	const [loading, setLoading] = useState<boolean>(false);
+	const [, setLoading] = useState<boolean>(false);
 	const [error, setError] = useState<string | null>(null);
 	const router = useRouter();
 
@@ -78,7 +78,7 @@ const BooksPage = () => {
 							<div className='mt-2 mb-6 text-sm'>
 								{Array.isArray(item.author_name)
 									? item.author_name.map((author) => {
-											return <div key={`${item.key}-${author}`}>{author}</div>;
+											return <div key={`${item.key}-${Math.random()}`}>{author}</div>;
 									  })
 									: item.author_name}
 							</div>
@@ -97,6 +97,16 @@ const BooksPage = () => {
 		setPage(1);
 	};
 
+	// const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+	// 	if (e.key === 'Enter') {
+	// 		setKeyword('');
+	// 	}
+	// };
+
+	// const handleInputClick = () => {
+	// 	setKeyword('');
+	// };
+
 	const handlePageChange = (newPage: number) => {
 		setPage(newPage);
 	};
@@ -108,12 +118,14 @@ const BooksPage = () => {
 				placeholder={'Find books...'}
 				value={keyword}
 				onChange={handleSearchInput}
+				// onKeyDown={handleKeyDown}
+				// onClick={handleInputClick}
 				inputClassName={
 					'bg-gray-50 p-4 border border-gray-300 text-gray-900 rounded-md block w-full p-2.5 dark:bg-gray-200 dark:placeholder-gray-400 dark:text-black'
 				}
 			/>
 			<div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 pt-8 pb-8'>
-				{loading && <div>Loading books...</div>}
+				{/* {loading && <div className='text-xl text-slate-600 text-center font-semibold'>Loading books...</div>} */}
 				{error && <div className='error'>{error}</div>}
 				{books && returnCards(books)}
 			</div>
