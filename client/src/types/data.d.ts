@@ -14,6 +14,7 @@ interface Book {
 	author_name: string[];
 	first_publish_year: number;
 	cover_i: number;
+	edition_count?: number;
 	subject?: string[];
 	isbn?: string[];
 	publish_date?: string[];

@@ -68,14 +68,23 @@ const BooksPage = () => {
 								</div>
 							)}
 						</div>
-						<div className='flex-1 p-6'>
-							<div className='flex items-baseline'>
+						<div className='flex flex-1 p-6 flex-col'>
+							<div className='flex flex-col items-baseline flex-wrap break-words'>
 								<div className='text-gray-600 text-xs uppercase font-semibold tracking-wide'>
-									Publishing Year: {item.first_publish_year}
+									<div>Publishing Year: {item.first_publish_year}</div>
 								</div>
 							</div>
-							<h4 className='mt-2 font-semibold text-lg leading-tight truncate'>{item.title}</h4>
-							<div className='mt-2 text-sm'>{item.author_name}</div>
+							<h4 className='mt-6 font-semibold text-xl leading-tight flex-wrap break-words'>{item.title}</h4>
+							<div className='mt-2 mb-6 text-sm'>
+								{Array.isArray(item.author_name)
+									? item.author_name.map((author) => {
+											return <div key={`${item.key}-${author}`}>{author}</div>;
+									  })
+									: item.author_name}
+							</div>
+							<div className='mt-auto text-gray-600 text-xs uppercase font-semibold tracking-wide'>
+								<div>Edition: {item.edition_count}</div>
+							</div>
 						</div>
 					</div>
 				))}
