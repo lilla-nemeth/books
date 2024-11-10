@@ -14,7 +14,7 @@ import { useEffect, useState } from 'react';
 const BooksPage: React.FC = () => {
 	const { status } = useSession();
 	const [books, setBooks] = useState<Books['docs']>([]);
-	const [keyword, setKeyword] = useState('Animal Farm');
+	const [keyword, setKeyword] = useState('Harry Potter');
 	const [storedKeyword, setStoredKeyword] = useState(keyword);
 	const [page, setPage] = useState<number>(1);
 	const [totalCount, setTotalCount] = useState<number>(0);
