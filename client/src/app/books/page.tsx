@@ -60,6 +60,7 @@ const BooksPage = () => {
 									width={200}
 									height={200}
 									onError={handleImageError}
+									loading='lazy'
 									className='flex flex-5 flex-col w-full object-cover h-96'
 								/>
 							) : (
