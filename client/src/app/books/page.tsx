@@ -14,12 +14,11 @@ import { useEffect, useState } from 'react';
 const BooksPage: React.FC = () => {
 	const { status } = useSession();
 	const [books, setBooks] = useState<Books['docs']>([]);
-	const [, setFilteredBooksApiData] = useState<Books['docs']>([]);
 	const [keyword, setKeyword] = useState('Animal Farm');
 	const [storedKeyword, setStoredKeyword] = useState(keyword);
 	const [page, setPage] = useState<number>(1);
 	const [totalCount, setTotalCount] = useState<number>(0);
-	const [, setLoading] = useState<boolean>(false);
+	const [loading, setLoading] = useState<boolean>(false);
 	const [error, setError] = useState<string | null>(null);
 	const router = useRouter();
 	const { setAverageDuration, setTotalDuration, setRequestCount, requestCount } = useAverageDuration();
@@ -46,8 +45,6 @@ const BooksPage: React.FC = () => {
 			if (keyword) {
 				fetchBooks(
 					setBooks,
-					books,
-					setFilteredBooksApiData,
 					keyword,
 					offset,
 					limit,
@@ -65,6 +62,8 @@ const BooksPage: React.FC = () => {
 
 	return (
 		<div className='flex flex-col m-4 antialiased p-8'>
+			<div className='flex justify-center p-4 text-500 text-xl font-semibold'>{loading ? 'Books are loading...' : 'Books'}</div>
+			{error && <div className='flex justify-center text-500 text-xl font-semibold'>{error}</div>}
 			<Input
 				type={'text'}
 				placeholder={'Find books...'}
@@ -75,7 +74,6 @@ const BooksPage: React.FC = () => {
 				}
 			/>
 			<div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 pt-8 pb-8'>
-				{error && <div className='error'>{error}</div>}
 				{books && <Card bookItems={books} handleImageError={(e) => handleImageError(e)} />}
 			</div>
 			<Pagination

@@ -8,10 +8,12 @@ const HeaderContent: React.FC = () => {
 
 	return (
 		<>
-			{session && `Hi, ${session.user?.name}!`}
-			{session && <div>Average Duration: {averageDuration.toFixed(2)} ms</div>}
 			{session ? (
-				<Button onClick={() => signOut()} label={'Sign Out'} />
+				<>
+					<div>Hi, {session.user?.name}!</div>
+					<div>Average Duration: {averageDuration.toFixed(2)} ms</div>
+					<Button onClick={() => signOut()} label={'Sign Out'} />
+				</>
 			) : (
 				<Button onClick={() => signIn('github', { callbackUrl: '/books' })} label={'Sign In'} className='flex ml-auto' />
 			)}

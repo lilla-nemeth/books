@@ -20,8 +20,6 @@ const calculateDuration = (
 
 const fetchBooks = async (
 	setBooks: Dispatch<SetStateAction<Books['docs']>>,
-	books: Books['docs'],
-	setFilteredBooksData: Dispatch<SetStateAction<Books['docs']>>,
 	searchTerm: string,
 	offset: number,
 	limit: number,
@@ -52,11 +50,11 @@ const fetchBooks = async (
 		calculateDuration(startTime, endTime, requestCount, setTotalDuration, setRequestCount, setAverageDuration);
 
 		setBooks(data.docs);
-		setFilteredBooksData(books);
 		setTotalCount(data.numFound || 0);
 	} catch (err) {
 		setError((err as Error).message);
 	}
+
 	setLoading(false);
 };
 
